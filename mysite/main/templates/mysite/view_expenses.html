@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>View Expenses</h1>
+
+    
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Show Expenses</button>
+    </form>
+
+    
+    <h2>Expenses for {{ selected_month }}/{{ selected_year }}</h2>
+
+    
+    <div class="table-responsive">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Party</th>
+                <th>Particulars</th>
+                <th>Invoice No.</th>
+                <th>Amount</th>
+                <th>Bank/Cash</th>
+                <th>IGST</th>
+                <th>CGST</th>
+                <th>KGST</th>
+                <th>TDS</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.date }}</td>
+                    <td>{{ expense.party }}</td>
+                    <td>{{ expense.particulars }}</td>
+                    <td>{{ expense.invoice_no }}</td>
+                    <td>{{ expense.amount }}</td>
+                    <td>{{ expense.bank_cash }}</td>
+                    <td>{{ expense.igst }}</td>
+                    <td>{{ expense.cgst }}</td>
+                    <td>{{ expense.kgst }}</td>
+                    <td>{{ expense.tds }}</td>
+                    <td>{{ expense.total }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="11">No expenses found for the selected month and year.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    {% endblock %}

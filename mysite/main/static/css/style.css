@@ -1,0 +1,36 @@
+nav ul {
+    list-style-type: none; /* Remove bullets */
+    padding: 0; /* Remove padding */
+}
+
+nav ul li {
+    position: relative; /* Needed for positioning the submenu */
+}
+
+nav ul li a {
+    text-decoration: none; /* Remove underline from links */
+    padding: 10px 15px; /* Add padding to the links */
+    display: block; /* Make the entire area clickable */
+    color: #333; /* Change text color */
+    background-color: #f0f0f0; /* Background color */
+}
+
+nav ul li a:hover {
+    background-color: #ddd; /* Change background on hover */
+}
+
+nav ul li ul {
+    display: none; /* Hide the submenu by default */
+    position: absolute; /* Position it relative to the parent */
+    left: 0; /* Align it with the left edge of the parent */
+    top: 100%; /* Position it below the parent */
+    background-color: #f0f0f0; /* Background color for submenu */
+    z-index: 1000; /* Ensure it appears on top */
+}
+nav ul li:hover ul {
+    display: block; /* Show the submenu on hover */
+}
+
+nav ul li ul li a {
+    padding: 10px 20px; /* Add padding to submenu items */
+}

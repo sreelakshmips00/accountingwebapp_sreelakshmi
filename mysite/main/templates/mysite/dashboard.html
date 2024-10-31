@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h1>Welcome to the Dashboard</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="#">Create</a>
+                <ul>
+                    <li><a href="{% url 'invoice' %}">Invoice</a></li>
+                    <li><a href="{% url 'receipt' %}">Receipt</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="{% url 'expenses' %}">Expenses</a>
+                <ul>
+                    <li><a href="{% url 'view_expenses' %}">View Expenses</a></li>
+                    <li><a href="{% url 'add_expenses' %}">Add Expenses</a></li>
+                </ul>
+            </li>
+            <li><a href="{% url 'accounts' %}">Accounts</a></li>
+            <li><a href="{% url 'manage' %}">Manage</a></li>
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+</body>
+</html>
