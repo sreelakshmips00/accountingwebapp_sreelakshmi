@@ -11,6 +11,7 @@ from decimal import Decimal
 from django.template.loader import get_template
 
 
+
 def home(request):
     return render(request, 'mysite/dashboard.html')
 
@@ -26,39 +27,47 @@ def receipt(request):
 def expenses(request):
     return render(request, 'mysite/expenses.html')
 
-IGST_RATE = Decimal('0.18')  # IGST as Decimal
-CGST_RATE = Decimal('0.0009')  # CGST as Decimal
-KGST_RATE = Decimal('0.0009')  # KGST as Decimal
-TDS_RATE = Decimal('0.10')   # TDS as Decimal
+IGST_RATE = Decimal('0.18')  
+CGST_RATE = Decimal('0.0009')  
+KGST_RATE = Decimal('0.0009')  
+TDS_RATE = Decimal('0.10')   
 
 def add_expenses(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
         if form.is_valid():
             try:
-                
                 amount = form.cleaned_data['amount']
                 if not isinstance(amount, Decimal):
-                    amount = Decimal(str(amount))  
+                    amount = Decimal(str(amount))  # Convert input to Decimal
                 
-                igst_amount = amount * IGST_RATE
-                cgst_amount = amount * CGST_RATE
-                kgst_amount = amount * KGST_RATE
-                tds_amount = amount * TDS_RATE
-                total = amount + igst_amount + cgst_amount + kgst_amount - tds_amount
+                IGST_RATE = Decimal('18.00')  
+                CGST_RATE = Decimal('0.0009') 
+                KGST_RATE = Decimal('0.0009')  
+                TDS_RATE = Decimal('10.00')   
+
+                igst_amount = (amount * IGST_RATE / Decimal('100')).quantize(Decimal('0.01'))
+                cgst_amount = (amount * CGST_RATE / Decimal('100')).quantize(Decimal('0.01'))
+                kgst_amount = (amount * KGST_RATE / Decimal('100')).quantize(Decimal('0.01'))
+                tds_amount = (amount * TDS_RATE / Decimal('100')).quantize(Decimal('0.01'))
+                
+                total = (amount + igst_amount + cgst_amount + kgst_amount - tds_amount).quantize(Decimal('0.01'))
+
                 expense = form.save(commit=False)
                 expense.igst = igst_amount
                 expense.cgst = cgst_amount
                 expense.kgst = kgst_amount
                 expense.tds = tds_amount
-                expense.total = total 
+                expense.total = total  
                 expense.save()
+
                 return redirect('view_expenses')
             except InvalidOperation:
                 form.add_error('amount', 'Invalid amount entered. Please check your inputs.')
 
     else:
         form = ExpenseForm()
+    
     return render(request, 'mysite/add_expenses.html', {'form': form})
 
 def view_expenses(request):
