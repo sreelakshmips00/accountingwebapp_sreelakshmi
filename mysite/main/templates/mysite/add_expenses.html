@@ -4,6 +4,9 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        {% if form.amount.errors %}
+        <div style="color: red;">{{ form.amount.errors.0 }}</div>
+        {% endif %}
         <button type="submit">Add Expense</button>
     </form>
 {% endblock %}

@@ -1,7 +1,9 @@
 from django import forms
 from .models import Expense
 import datetime
-
+from decimal import Decimal
+from django.core.exceptions import ValidationError
+from decimal import Decimal, InvalidOperation
 
 
 class ExpenseForm(forms.ModelForm):
@@ -11,6 +13,22 @@ class ExpenseForm(forms.ModelForm):
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
         }
+
+    def clean_amount(self):
+        amount = self.cleaned_data.get('amount')
+
+        if amount is None:
+            raise forms.ValidationError("Amount is required.")
+
+        try:
+            amount = Decimal(amount)
+        except InvalidOperation:
+            raise forms.ValidationError("Invalid amount. Please enter a valid number.")
+
+        if amount <= 0:
+            raise forms.ValidationError("Amount must be greater than zero.")
+
+        return amount
 
 
 YEAR_CHOICES = [(year, year) for year in range(2017, datetime.datetime.now().year + 1)]
